@@ -1,7 +1,9 @@
 package com.drago.craze.viewadapters;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +51,9 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
     public void setApps(List<InstalledApp> apps) {
         this.apps = apps;
     }
+    public void setSelectionEnabled(boolean enabled) {
+        this.selectionEnabled = enabled;
+    }
     public void setSelectedApps(List<String> selectedApps){
         this.selectedApps = selectedApps;
     }
@@ -60,6 +65,8 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView appNameTextView;
         private TextView packageNameTextView;
+        private TextView packageSizeTextView;
+
         private ImageView appIconImageView;
         public ViewHolder(View itemView) {
             super(itemView);
@@ -69,6 +76,7 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
                     if (position != RecyclerView.NO_POSITION) {
                         InstalledApp app = apps.get(position);
                         appListViewModel.updateSelectedApps(app.getPackageName());
+                        appListViewModel.updateTotalAppSize(app.getPackageName(), app.getAppSize());
                         notifyItemChanged(position);
                     }
                 }
@@ -79,6 +87,7 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
                 if (position != RecyclerView.NO_POSITION) {
                     InstalledApp app = apps.get(position);
                     appListViewModel.updateSelectedApps(app.getPackageName());
+                    appListViewModel.updateTotalAppSize(app.getPackageName(), app.getAppSize());
                     notifyItemChanged(position);
                 }
                 return false;
@@ -86,19 +95,22 @@ public class AppListAdapter extends RecyclerView.Adapter<AppListAdapter.ViewHold
             appNameTextView = itemView.findViewById(R.id.appNameTextView);
             appNameTextView.setTypeface(null, Typeface.BOLD);
             packageNameTextView = itemView.findViewById(R.id.packageNameTextView);
+            packageSizeTextView = itemView.findViewById(R.id.packageSizeTextView);
             appIconImageView = itemView.findViewById(R.id.appIconImageView);
         }
 
         public void bind(InstalledApp app) {
             appNameTextView.setText(app.getAppName());
             packageNameTextView.setText(app.getPackageName());
+            packageSizeTextView.setText(getFormattedApkSize(app.getAppSize(), itemView.getContext()));
             appIconImageView.setImageDrawable(app.getAppIcon());
             // Set the background color based on the selection state
             boolean isSelected = selectedApps.contains(app.getPackageName());
-
             int backgroundColor =  isSelected ? Color.parseColor("#deebff") : Color.WHITE;
             itemView.setBackgroundColor(backgroundColor);
         }
 
+    }String getFormattedApkSize(long apkSize, Context mainContext) {
+        return Formatter.formatFileSize(mainContext, apkSize);
     }
 }

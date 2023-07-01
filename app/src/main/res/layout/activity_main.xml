@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_app_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/uninstall_fab"
@@ -16,7 +19,14 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Uninstall"
+        android:text="@string/uninstall"
+        android:visibility="gone"
+        app:iconTint="@color/white"
+        android:textSize="12sp"
+        android:letterSpacing="0"
+        app:iconPadding="4dp"
+        app:iconSize="18dp"
+        android:textColor="@color/white"
         app:icon="@drawable/delete_outline_24"
         app:layout_constraintBottom_toBottomOf="@+id/main_app_list"
         app:layout_constraintEnd_toEndOf="parent" />
